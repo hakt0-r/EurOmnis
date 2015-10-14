@@ -73,3 +73,11 @@ join pg_class as c on c.oid = t.tgrelid
 join pg_proc as f on f.oid = t.tgfoid
 where t.tgconstraint = 0 -- PG 9.0 +
 and c.relname = 'faddresses' -- optional, specify the table for which you want to retrieve columns
+
+-- Query to search all the fuctions (or triggers) in the data base - schema for a word.
+select routine_name::varchar --typecasting and selecting the right column name form the table, substityte that with * to see the table.
+from information_schema.routines
+where specific_schema = 'SCHEMA_NAME' -- <---
+  AND specific_catalog = 'DATABASE_NAME' -- <---
+	AND data_type <> '"trigger"' -- Comment this if we are sure that we dont need to look into triggers.
+	AND routine_definition ilike '%WORD_TO_SEARCH%' -- <---
